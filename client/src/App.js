@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
 
 
 
@@ -16,17 +17,21 @@ function App() {
         <Navbar />
         <div className="pages">
           <Routes>
+            <Route 
+            path="/"
+            element={<Home />}
+            />
             <Route
-              path="/"
-              element={user ? <Home /> : <Navigate to="/login" />}
+              path="/dashboard"
+              element={user ? <Dashboard /> : <Navigate to="/login" />}
             />
             <Route
               path="/login"
-              element={!user ? <Login /> : <Navigate to="/" />}
+              element={!user ? <Login /> : <Navigate to="/dashboard" />}
             />
             <Route
               path="/signup"
-              element={!user ? <Signup /> : <Navigate to="/" />}
+              element={!user ? <Signup /> : <Navigate to="/dashboard" />}
             />
           </Routes>
         </div>
