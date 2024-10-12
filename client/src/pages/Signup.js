@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useSignup } from "../hooks/useSignup"
 
 const Signup = () => {
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const {signup, error, isLoading} = useSignup()
@@ -9,7 +11,7 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await signup(email, password)
+        await signup(firstName, lastName, email, password)
     }
 
     const handleCheckbox = (e) => {
@@ -24,6 +26,19 @@ const Signup = () => {
     return(
         <form className="signup" onSubmit={handleSubmit}>
             <h3>Sign Up</h3>
+            <label>Full Name:</label>
+            <span>
+                <input 
+                className ="fullName" 
+                onChange={(e)=> setFirstName(e.target.value)}
+                value={firstName}
+                />
+                <input 
+                className = "fullName" 
+                onChange={(e)=> setLastName(e.target.value)}
+                value={lastName}
+                />
+            </span>
             <label>Email:</label>
             <input 
             type="email" 

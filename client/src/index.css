@@ -141,3 +141,11 @@ nav button {
   font-size: 1em;
   margin-left: 10px;
 }
+.fullName{
+  width:47.5%;
+  flex:50%;
+  display: inline;
+}
+input + input {
+  margin-left: 5%;
+}
