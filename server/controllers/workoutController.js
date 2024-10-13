@@ -5,8 +5,13 @@ const mongoose = require('mongoose')
 const getWorkouts = async (req, res) => {
     const user_id = req.user._id
     const workouts = await Workout.find({ user_id }).sort({createdAt: -1})
-
-    res.status(200).json({workouts})
+    const cleaned_workouts = workouts.map(workout => ({
+        title: workout.title,
+        reps: workout.reps,
+        load: workout.load,
+        updatedAt: workout.updatedAt
+    }));
+    res.status(200).json({cleaned_workouts})
 }
 // get a single workout
 const getWorkout = async (req, res) => {
@@ -20,7 +25,13 @@ const getWorkout = async (req, res) => {
     if (!workout){
         return res.status(404).json({error: 'No such workout'})
     }
-    res.status(200).json({workout})
+    const cleaned_workout = {
+        title: workout.title,
+        reps: workout.reps,
+        load: workout.load,
+        updatedAt: workout.updatedAt
+    }
+    res.status(200).json({cleaned_workout})
 }
 // create a new workout
 const createWorkout = async (req, res) => {
@@ -43,7 +54,13 @@ const createWorkout = async (req, res) => {
     try{
         const user_id = req.user._id
         const workout = await Workout.create({title, load, reps, user_id})
-        res.status(200).json(workout)
+        const cleaned_workout = {
+            title: workout.title,
+            reps: workout.reps,
+            load: workout.load,
+            updatedAt: workout.updatedAt
+        }
+        res.status(200).json(cleaned_workout)
     } catch(error){
         res.status(400).json({error: error.message})
     }
@@ -61,7 +78,13 @@ const deleteWorkout = async (req, res) => {
     if (!workout){
         return res.status(400).json({error: 'No such workout'})
     }
-    res.status(200).json({workout})
+    const cleaned_workout = {
+        title: workout.title,
+        reps: workout.reps,
+        load: workout.load,
+        updatedAt: workout.updatedAt
+    }
+    res.status(200).json({cleaned_workout})
 }
 // update a workout
 const updateWorkout = async (req, res) => {
