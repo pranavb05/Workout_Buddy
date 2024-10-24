@@ -2,15 +2,17 @@ import { useState } from 'react'
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import { useAuthContext } from '../hooks/useAuthContext'
 
-const WorkoutForm = () => {
+const WorkoutForm = ({workout, toggleModal}) => {
     const {dispatch} = useWorkoutsContext()
     const {user} = useAuthContext()
 
-    const [title, setTitle] = useState('')
-    const [load, setLoad] = useState('')
-    const [reps, setReps] = useState('')
+    const [title, setTitle] = useState(workout ? workout.title : '')
+    const [load, setLoad] = useState(workout ? workout.load : '')
+    const [reps, setReps] = useState(workout ? workout.reps : '')
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
+    const action = workout ? "edit" : "create"
+    const id = workout ? workout._id : null
     
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -18,28 +20,58 @@ const WorkoutForm = () => {
             return setError('You must be logged in!')
         }
         const workout = {title, load, reps}
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/`, {
+        if (action === "create"){
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/`, {
             method:'POST',
             body: JSON.stringify(workout),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${user.token}`
             }
-        })
-        const json = await response.json()
-        
-        if (!response.ok){
-            setError(json.error)
-            setEmptyFields(json.emptyFields)
-        }
-        if (response.ok){
-            setTitle('')
-            setLoad('')
-            setReps('')
-            setError(null)
-            setEmptyFields([])
-            console.log('New workout added!')
-            dispatch({type: 'CREATE_WORKOUT', payload: json})
+            })
+            const json = await response.json()
+            
+            if (!response.ok){
+                setError(json.error)
+                setEmptyFields(json.emptyFields)
+            }
+            if (response.ok){
+                setTitle('')
+                setLoad('')
+                setReps('')
+                setError(null)
+                setEmptyFields([])
+                dispatch({type: 'CREATE_WORKOUT', payload: json})
+            }
+        } 
+        else if (action === "edit"){
+            if (workout.title === title && workout.load === load && workout.reps === reps){
+                setError('One or more fields must be edited!')
+                return
+            }
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workouts/${id}`, {
+                method:'PATCH',
+                body: JSON.stringify(workout),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                }
+                })
+            const json = await response.json()
+
+            if (!response.ok){
+                setError(json.error)
+                setEmptyFields(json.emptyFields)
+            }
+            if (response.ok){
+                setTitle('')
+                setLoad('')
+                setReps('')
+                setError(null)
+                setEmptyFields([])
+                dispatch({type: 'UPDATE_WORKOUT', payload: json})
+                toggleModal()
+            }
         }
     }
 
@@ -70,7 +102,7 @@ const WorkoutForm = () => {
             className={emptyFields.includes('reps') ? 'error' : ''}
             />
 
-            <button>Add Workout</button>
+            <button>{workout ? "Edit Workout" : "Add Workout"}</button>
             {error && <div className="error">{error}</div>}
         </form>
      );
