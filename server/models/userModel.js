@@ -22,6 +22,10 @@ const userSchema = new Schema({
     password: {
         type: String, 
         required: true
+    }, 
+    resetToken: {
+        type: String, 
+        required: false
     }
 }, { timestamps: true})
 
@@ -64,6 +68,52 @@ userSchema.statics.login = async function (email, password) {
     if (!match) {
         throw Error('Incorrect Password')
     }
+    return user
+}
+
+
+// checks if user exists
+userSchema.statics.checkEmail = async function (email){
+    if (!email){
+        throw Error('Email is required')
+    }
+    const user = await this.findOne({ email })
+    if (!user) {
+        throw Error('User does not exist')
+    }
+    return user
+}
+
+// puts the token in the database
+userSchema.statics.setToken = async function (id, token){
+    const user = await this.findOneAndUpdate({_id: id}, {resetToken: token})
+    return user
+}
+
+
+// check reset password token
+userSchema.statics.verifyResetToken = async function (token){
+    if (!token){
+        throw Error('Token is required')
+    }
+    const user = await this.findOne({resetToken: token})
+    if (!user) {
+        throw Error('Invalid or expired token')
+    }
+    return user
+}
+
+// update password
+userSchema.statics.updatePassword = async function (id, password){
+    if (!password){
+        throw Error('Password is required')
+    }
+    if (!validator.isStrongPassword(password)) {
+        throw Error('Password not strong enough. Requirements: 1 capital letter, 1 special character and 8 characters')
+    }
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(password, salt)
+    const user = await this.findOneAndUpdate({_id: id}, {password: hash, resetToken: null})
     return user
 }
 

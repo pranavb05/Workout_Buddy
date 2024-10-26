@@ -6,6 +6,8 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
+import ResetPasswordEmail from './pages/ResetPasswordEmail';
+import ResetPassword from './pages/ResetPassword';
 
 
 
@@ -32,6 +34,14 @@ function App() {
             <Route
               path="/signup"
               element={!user ? <Signup /> : <Navigate to="/dashboard" />}
+            />
+            <Route
+              path="/reset-password-email"
+              element={!user ? <ResetPasswordEmail /> : <Navigate to="/dashboard"/>}
+            />
+            <Route
+              path="/reset-password/:token"
+              element={!user ? <ResetPassword /> : <Navigate to="/dashboard"/>}
             />
           </Routes>
         </div>

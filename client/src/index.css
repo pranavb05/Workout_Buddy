@@ -5,6 +5,7 @@
 :root {
   --primary: #00b4d8;
   --error: #e7195a;
+  --success: #4caf50;
 }
 body {
   background: #f1f1f1;
@@ -106,6 +107,14 @@ div.error {
   border-radius: 4px;
   margin: 20px 0;
 }
+div.success {
+  padding: 10px;
+  background: #effff1;
+  border: 1px solid var(--success);
+  color: var(--success);
+  border-radius: 4px;
+  margin: 20px 0;
+}
 input.error {
   border: 1px solid var(--error);
 }
@@ -125,19 +134,32 @@ form.signup, form.login {
   padding: 20px;
   background: #fff;
   border-radius: 4px;
+  position: relative;
 }
-.labelAndCheckbox{
+.forgot-password{
+  position: absolute;
+  font-size: small;
+  color:#666666;
+  text-decoration: none;
+  right: 5%;
+  bottom: 17%;
+}
+.show-password{
+  position: absolute;
+  bottom: 2%;
+  right: 5%;
   float:right;
   display: flex;
   align-items: center;
 }
-.labelAndCheckbox label{
+.show-password label{
+  position: relative;
   white-space: nowrap;
   font-size: 14px;
 }
-.labelAndCheckbox input[type="checkbox"]{
-  margin-right: 10px;
-  margin-top:20px;
+.show-password input[type="checkbox"]{
+  margin-right: 5%;
+  margin-top: 15%;
 }
 nav button {
   background: #fff;

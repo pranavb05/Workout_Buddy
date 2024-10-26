@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useLogin } from '../hooks/useLogin'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -36,9 +37,12 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)} 
             value={password} 
             />
+            <span className="forgot-password">
+            <Link to="/reset-password-email">Forgot Password?</Link> 
+            </span>
             <span>
-                <button disabled={isLoading}>Login</button>
-                <div className="labelAndCheckbox">
+                <button disabled={isLoading} onClick={handleSubmit}>Login</button>
+                <div className="show-password">
                     <input type='checkbox' onChange={handleCheckbox}></input> 
                     <label>Show Password</label>
                 </div>

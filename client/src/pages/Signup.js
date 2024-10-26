@@ -53,7 +53,7 @@ const Signup = () => {
             />
             <span>
                 <button disabled={isLoading}>Sign Up</button>
-                <div className="labelAndCheckbox">
+                <div className="show-password">
                     <input type='checkbox' onChange={handleCheckbox}></input> 
                     <label>Show Password</label>
                 </div>
