@@ -62,7 +62,7 @@ const resetPasswordEmail = async (req, res) => {
             from: "no-reply@bhargavap.club",
             to: email,
             subject: "Reset your Workout Buddy Password!",
-            text: `Please click the link below to reset your Workout Buddy Password: ${process.env.FRONTEND_URL}/reset-password/${token}`,
+            text: `Hello ${user.firstName}, \nPlease click the link below to reset your Workout Buddy Password:\n${process.env.FRONTEND_URL}/reset-password/${token}`,
           };
         await transporter.sendMail(mailOptions)
         res.status(200).json({email})
